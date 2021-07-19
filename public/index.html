@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>URL Shortener</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <script>
+
+        function copyFunction() {
+            var copyText = document.getElementById("shortUrl");
+            copyText.select();
+            document.execCommand("copy");
+            alert("text copied");
+        }
+
+        function genShort(event) {
+            event.preventDefault();
+
+            const url = document.getElementById("url").value;
+            var shortUrl = document.getElementById("shortUrl");
+
+            const data = { url };
+
+            axios.post("/admin/urls/", data).then((response, request) => {
+                shortUrl.value = response.data['value'];
+            })
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <form onsubmit="genShort(event)">
+            <div class="form-group">
+                <label for="url">complete url:</label>
+                <input type="text" class="form-control" id="url" placeholder="Enter complete URL" name="url">
+            </div>
+
+            <button id="createBtn" type="submit" class="btn btn-primary">Create URL</button>
+
+            <div class="form-group">
+
+                <label for="shortUrl"> Shortened URL:</label>
+                <input class="form-control" type="text" id="shortUrl" name="shortUrl">
+
+                <button type="button" onclick="copyFunction()">Copy URL</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
